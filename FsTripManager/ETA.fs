@@ -19,7 +19,8 @@ type Vehicle =
    LicensePlate: string;}
 
 type Movement =
-  {Vehicles: Vehicle list;
+  {Code: string;
+   Vehicles: Vehicle list;
    Origin: Location;
    Destination: Location;
    STD: System.DateTime;
