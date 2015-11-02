@@ -1,4 +1,5 @@
-﻿open ETA
+﻿open Akka.FSharp
+open ETA
 
 [<EntryPoint>]
 let main argv = 
@@ -11,7 +12,22 @@ let main argv =
     let position =  { ModemID = "Modem1"; Location = origin; Timestamp = System.DateTime.Now }
     let path = makeStraightPath origin destination (System.TimeSpan.FromMinutes(100.0))
     let currentCheckpoint = findNearestPoint path current
-
     printfn "%A" currentCheckpoint
+
+    use system = System.create "my-system" (Configuration.load())
+
+    let handleMessage (mailbox : Actor<'Message>) =
+        let childActor = spawn mailbox.Context "my-actor2" (actorOf (fun m -> printf "%A" m ))
+        let rec loop() = actor {
+            let! message = mailbox.Receive()
+            printf "%A" message
+            childActor <! "1"
+            return! loop()
+        }
+        loop()
+    let aref = spawn system "my-actor" handleMessage
+
+    aref <! "Hello actor!"
+
     System.Console.ReadKey() |> ignore
     0 // return an integer exit code
