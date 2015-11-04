@@ -1,6 +1,7 @@
 ﻿open Akka.FSharp
 open ETA
 open Actors
+open Logger
 
 [<EntryPoint>]
 let main argv = 
@@ -16,7 +17,7 @@ let main argv =
     //printfn "%A" currentCheckpoint
     
     use system = System.create "my-system" (Configuration.load())
-    let aref = spawn system "my-root" (handleMovements logger)
+    let aref = spawn system "my-root" (handleMovements newLogger)
 
     aref <! NewMovement({ Movement = movement })
     aref <! NewPosition({ Position = position })
