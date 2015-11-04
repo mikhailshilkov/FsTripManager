@@ -19,5 +19,4 @@ let writelog color sender s =
 
 let newLogger() = 
     let color = randomColor()
-    { new ILogger with member __.Log (mailbox : Actor<'b>) format = 
-        Printf.kprintf (writelog color mailbox.Self.Path.Name) format }
+    { new ILogger with member __.Log (mailbox : Actor<'b>) format = Printf.kprintf (writelog color mailbox.Self.Path.Name) format }
